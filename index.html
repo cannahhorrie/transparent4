@@ -48,10 +48,6 @@
   </div>
 </div>
 
-<button onclick='sendTextToUnity()'>Text</button>
-<button onclick='setCameraPosition()'>Move Camera</button>
-<button onclick='setCameraRotation()'>Rotate Camera</button>
-
 <script>
   var container = document.querySelector("#unity-container");
   var canvas = document.querySelector("#unity-canvas");
@@ -154,6 +150,36 @@
   };
 
   document.body.appendChild(script);
+
+  // Listen for messages from the parent window
+  window.addEventListener('message', function(event) {
+    console.log('Received message:', event.data);
+
+    if (event.data.type === 'unityMessage') {
+      switch (event.data.functionName) {
+        case 'SetText':
+          console.log('Setting text:', event.data.argument);
+          if (unityInstance) {
+            unityInstance.SendMessage('TextObject', 'SetText', event.data.argument);
+          }
+          break;
+        case 'SetCameraXPosition':
+          console.log('Setting camera X position:', event.data.argument);
+          if (unityInstance) {
+            unityInstance.SendMessage('Main Camera', 'SetCameraXPosition', event.data.argument);
+          }
+          break;
+        case 'SetCameraRX':
+          console.log('Setting camera X rotation:', event.data.argument);
+          if (unityInstance) {
+            unityInstance.SendMessage('Main Camera', 'SetCameraRX', event.data.argument);
+          }
+          break;
+        default:
+          console.warn('Unknown function name:', event.data.functionName);
+      }
+    }
+  });
 </script>
 </body>
 </html>
