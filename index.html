@@ -152,34 +152,36 @@
   document.body.appendChild(script);
 
   // Listen for messages from the parent window
-  window.addEventListener('message', function(event) {
-    console.log('Received message:', event.data);
+ window.addEventListener('message', function(event) {
+  console.log('Received message:', event.data);
 
-    if (event.data.type === 'unityMessage') {
-      switch (event.data.functionName) {
-        case 'SetText':
-          console.log('Setting text:', event.data.argument);
-          if (unityInstance) {
-            unityInstance.SendMessage('TextObject', 'SetText', event.data.argument);
-          }
-          break;
-        case 'SetCameraXPosition':
-          console.log('Setting camera X position:', event.data.argument);
-          if (unityInstance) {
-            unityInstance.SendMessage('Main Camera', 'SetCameraXPosition', event.data.argument);
-          }
-          break;
-        case 'SetCameraRX':
-          console.log('Setting camera X rotation:', event.data.argument);
-          if (unityInstance) {
-            unityInstance.SendMessage('Main Camera', 'SetCameraRX', event.data.argument);
-          }
-          break;
-        default:
-          console.warn('Unknown function name:', event.data.functionName);
-      }
+  if (event.data.type === 'unityMessage') {
+    // Ensure the message is from a trusted source if necessary
+    switch (event.data.functionName) {
+      case 'SetText':
+        console.log('Setting text:', event.data.argument);
+        if (unityInstance) {
+          unityInstance.SendMessage('TextObject', 'SetText', event.data.argument);
+        }
+        break;
+      case 'SetCameraXPosition':
+        console.log('Setting camera X position:', event.data.argument);
+        if (unityInstance) {
+          unityInstance.SendMessage('Main Camera', 'SetCameraXPosition', event.data.argument);
+        }
+        break;
+      case 'SetCameraRX':
+        console.log('Setting camera X rotation:', event.data.argument);
+        if (unityInstance) {
+          unityInstance.SendMessage('Main Camera', 'SetCameraRX', event.data.argument);
+        }
+        break;
+      default:
+        console.warn('Unknown function name:', event.data.functionName);
     }
-  });
+  }
+});
+
 </script>
 </body>
 </html>
